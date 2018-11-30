@@ -1,0 +1,104 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>SVG与多彩渐变圆环倒计时效果</title>
+  <style type="text/css">
+    svg {
+      transform: rotate(-0.05deg);
+    }
+    circle {
+      transition: stroke-dasharray .2s;
+    }
+    .time-count-x {
+      line-height: 1.5;
+      width: 440px;
+      position: relative;
+    }
+    .time-second {
+      position: absolute;
+      top: 50%; left: 0; right: 0;
+      margin-top: -.75em;
+      text-align: center;
+      font-size: 100px;
+    }
+  </style>
+</head>
+<body>
+<div id="main">
+  <div id="body">
+    <div id="effect" class="part" style="width:45%;">
+      <h3>效果：</h3>
+      <div class="show">
+        <div class="demo">
+          <div id="timeCountX" class="time-count-x">
+            <svg width="440" height="440" viewBox="0 0 440 440" class="center">
+              <defs>
+                <linearGradient x1="1" y1="0" x2="0" y2="0" id="gradient1">
+                  <stop offset="0%" stop-color="#e52c5c"></stop>
+                  <stop offset="100%" stop-color="#ab5aea"></stop>
+                </linearGradient>
+                <linearGradient x1="1" y1="0" x2="0" y2="0" id="gradient2">
+                  <stop offset="0%" stop-color="#4352f3"></stop>
+                  <stop offset="100%" stop-color="#ab5aea"></stop>
+                </linearGradient>
+              </defs>
+              <g transform="matrix(0,-1,1,0,0,440)">
+                <circle cx="220" cy="220" r="170" stroke-width="50" stroke="#f0f1f5" fill="none" stroke-linecap="round" stroke-dasharray="1069 1069"></circle>
+                <circle cx="220" cy="220" r="170" stroke-width="50" stroke="url('#gradient1')" stroke-linecap="round" fill="none" stroke-dasharray="1069 1069"></circle>
+                <circle cx="220" cy="220" r="170" stroke-width="50" stroke="url('#gradient2')" stroke-linecap="round" fill="none" stroke-dasharray="534.5 1069"></circle>
+              </g>
+            </svg>
+            <span id="timeSecond" class="time-second"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  const eleCircles=document.querySelectorAll("#timeCountX circle")
+  const econstimeSec=document.getElementById("timeSecond")
+  const perimeter=Math.PI*2*170
+  const circleInit=function(){
+    if(eleCircles[1]){
+      eleCircles[1].setAttribute("stroke-dasharray","1069 1069")
+    }
+    if(eleCircles[2]){
+      eleCircles[2].setAttribute("stroke-dasharray",perimeter/2+" 1069")
+    }
+    econstimeSec.innerHTML=""
+  }
+  let timerTimeCount=null
+  const fnTimeCount=function(time){
+    if(timerTimeCount){
+      return
+    }
+    let b=time||10
+    const a=function(){
+      const c=b/15
+      if(eleCircles[1]){
+        eleCircles[1].setAttribute("stroke-dasharray",perimeter*c+" 1069")
+      }
+      if(eleCircles[2]&&b<=8){
+        eleCircles[2].setAttribute("stroke-dasharray",perimeter*c+" 1069")
+      }
+      if(econstimeSec){
+        econstimeSec.innerHTML=b
+      }
+      b--
+      if(b<0){
+        clearInterval(timerTimeCount)
+        timerTimeCount=null
+        alert("时间到！")
+        circleInit()
+      }
+    }
+    a()
+    timerTimeCount=setInterval(a,1000)
+  }
+  fnTimeCount(15)
+</script>
+</body>
+</html>
